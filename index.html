@@ -1,0 +1,684 @@
+<title>Follow-Check</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: Handy-App, eine Spalte, Tab-Leiste unten im Daumenbereich */
+:root {
+  --bg: #f3f2f7;
+  --surface: #ffffff;
+  --line: #e2e0ea;
+  --fg: #1c1a26;
+  --muted: #6c6880;
+  --accent: #c2186b;
+  --accent-soft: #fbe3ef;
+  --warn: #b4540a;
+  --warn-soft: #fdecd9;
+  --good: #1c7c55;
+  --good-soft: #dcf2e7;
+  --bad: #b3263a;
+  --bad-soft: #fbe1e4;
+  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --bar-h: 64px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121019; --surface: #1c1926; --line: #2e2a3c; --fg: #efedf5; --muted: #9c97b0;
+    --accent: #f0629f; --accent-soft: #3a1a2b; --warn: #f2a25a; --warn-soft: #3a2614;
+    --good: #5fd39f; --good-soft: #15302a; --bad: #f2788a; --bad-soft: #3a1820;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121019; --surface: #1c1926; --line: #2e2a3c; --fg: #efedf5; --muted: #9c97b0;
+  --accent: #f0629f; --accent-soft: #3a1a2b; --warn: #f2a25a; --warn-soft: #3a2614;
+  --good: #5fd39f; --good-soft: #15302a; --bad: #f2788a; --bad-soft: #3a1820;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.45;
+  -webkit-tap-highlight-color: transparent;
+}
+.wrap {
+  max-width: 560px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 18px calc(var(--bar-h) + 28px + env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; gap: 16px;
+}
+h1, h2 { font-family: var(--display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h1 { font-size: 28px; font-weight: 800; }
+h2 { font-size: 19px; font-weight: 600; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.eyebrow { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+a { color: var(--accent); }
+button, select, input { font: inherit; color: inherit; }
+button:focus-visible, select:focus-visible, input:focus-visible, a:focus-visible, label:focus-within {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+header.top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
+header.top .meta { text-align: right; }
+
+.banner {
+  border-radius: 14px; padding: 12px 14px; font-size: 14px;
+  background: var(--warn-soft); color: var(--fg); display: flex; flex-direction: column; gap: 4px;
+}
+.banner strong { color: var(--warn); }
+.banner.ok { background: var(--good-soft); }
+.banner.ok strong { color: var(--good); }
+.banner.err { background: var(--bad-soft); }
+.banner.err strong { color: var(--bad); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 48px; padding: 0 18px; border-radius: 14px; border: 0; cursor: pointer;
+  background: var(--accent); color: #fff; font-weight: 600; font-size: 15.5px; width: 100%;
+}
+.btn.ghost { background: var(--surface); color: var(--fg); border: 1px solid var(--line); }
+.btn.sm { min-height: 38px; font-size: 14px; width: auto; padding: 0 14px; border-radius: 11px; }
+.file { position: relative; }
+.file input { position: absolute; inset: 0; opacity: 0; width: 100%; cursor: pointer; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tile {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px;
+  display: flex; flex-direction: column; gap: 2px; text-align: left; cursor: pointer; min-height: 92px;
+}
+.tile .n { font-family: var(--display); font-weight: 800; font-size: 30px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.tile .l { font-size: 13px; color: var(--muted); }
+.tile.warn .n { color: var(--warn); }
+.tile.accent .n { color: var(--accent); }
+.tile.wide { grid-column: span 2; flex-direction: row; align-items: center; justify-content: space-between; min-height: 0; }
+
+.ratio { height: 10px; border-radius: 99px; overflow: hidden; display: flex; background: var(--line); }
+.ratio span { display: block; height: 100%; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 3px; margin-right: 5px; vertical-align: 0; }
+
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; margin: 0 -16px; padding-left: 16px; padding-right: 16px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; border: 1px solid var(--line); background: var(--surface); border-radius: 99px;
+  padding: 8px 13px; font-size: 13.5px; cursor: pointer; white-space: nowrap; display: inline-flex; gap: 6px; align-items: center;
+}
+.chip b { font-family: var(--mono); font-weight: 500; font-size: 12px; color: var(--muted); }
+.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.chip[aria-pressed="true"] b { color: var(--bg); opacity: .75; }
+
+.tools { display: flex; gap: 8px; }
+.tools input { flex: 1; min-width: 0; }
+.field {
+  min-height: 44px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); padding: 0 12px; font-size: 16px;
+}
+
+.list { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+.list li { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-top: 1px solid var(--line); min-height: 58px; }
+.list li:first-child { border-top: 0; }
+.av {
+  flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--display); font-weight: 600; font-size: 15px; color: #fff;
+}
+.who { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.who .u { font-family: var(--mono); font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.who .d { font-size: 12.5px; color: var(--muted); }
+.open { flex: none; font-size: 13.5px; font-weight: 600; text-decoration: none; padding: 8px 12px; border-radius: 10px; background: var(--accent-soft); }
+.empty { padding: 26px 16px; text-align: center; color: var(--muted); }
+
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 30px 1fr; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+.steps li::before {
+  content: counter(s); width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff;
+  display: grid; place-items: center; font-family: var(--display); font-weight: 600;
+}
+.steps .path { font-size: 14px; margin-top: 4px; color: var(--muted); }
+.steps b { color: var(--fg); }
+
+.chart { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--muted); font-family: var(--body); font-size: 11px; }
+.chart .grid { stroke: var(--line); }
+.chart .bar { fill: var(--accent); }
+.chart .bar2 { fill: var(--muted); opacity: .45; }
+.chart .val { fill: var(--fg); font-weight: 600; }
+
+nav.bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  background: var(--surface); border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px);
+}
+nav.bar .in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); height: var(--bar-h); }
+nav.bar button {
+  border: 0; background: none; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  font-size: 11px; color: var(--muted); font-weight: 500;
+}
+nav.bar svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+nav.bar button[aria-current="page"] { color: var(--accent); }
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--bar-h) + 16px + env(safe-area-inset-bottom, 0px));
+  background: var(--fg); color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 14px; z-index: 30; max-width: calc(100% - 32px);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .view { animation: in .18s ease-out; }
+  @keyframes in { from { transform: translateY(4px); } to { transform: none; } }
+}
+</style>
+
+<div class="wrap" id="app">
+  <header class="top">
+    <div>
+      <div class="eyebrow">Instagram</div>
+      <h1>Follow-Check</h1>
+    </div>
+    <div class="meta small muted" id="stand"></div>
+  </header>
+  <div id="notice"></div>
+  <main id="view"></main>
+</div>
+
+<nav class="bar" aria-label="Bereiche">
+  <div class="in">
+    <button data-tab="home"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>Übersicht</button>
+    <button data-tab="lists"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M17 11l2 2 3.5-4"/></svg>Listen</button>
+    <button data-tab="changes"><svg viewBox="0 0 24 24"><path d="M4 7h13l-3-3M20 17H7l3 3"/></svg>Änderungen</button>
+    <button data-tab="history"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Verlauf</button>
+    <button data-tab="guide"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.3 2.4c-.5.2-.8.7-.8 1.2V14M12 17.2v.1"/></svg>Anleitung</button>
+  </div>
+</nav>
+
+<script>
+"use strict";
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } },
+  del(k) { try { localStorage.removeItem(k); } catch {} }
+};
+
+/* ---------- ZIP lesen (ohne Bibliothek, nur die nötigen Dateien) ---------- */
+async function readZip(file, wanted) {
+  const size = file.size;
+  const tailLen = Math.min(size, 65557);
+  const tail = new DataView(await file.slice(size - tailLen).arrayBuffer());
+  let eocd = -1;
+  for (let i = tailLen - 22; i >= 0; i--) if (tail.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+  if (eocd < 0) throw new Error("Das ist keine gültige ZIP-Datei.");
+  let count = tail.getUint16(eocd + 10, true);
+  let cdSize = tail.getUint32(eocd + 12, true);
+  let cdOff = tail.getUint32(eocd + 16, true);
+  if (cdOff === 0xffffffff || count === 0xffff) {
+    const loc = eocd - 20;
+    if (loc >= 0 && tail.getUint32(loc, true) === 0x07064b50) {
+      const z64off = Number(tail.getBigUint64(loc + 8, true));
+      const z = new DataView(await file.slice(z64off, z64off + 56).arrayBuffer());
+      count = Number(z.getBigUint64(32, true));
+      cdSize = Number(z.getBigUint64(40, true));
+      cdOff = Number(z.getBigUint64(48, true));
+    }
+  }
+  const cd = new DataView(await file.slice(cdOff, cdOff + cdSize).arrayBuffer());
+  const dec = new TextDecoder();
+  const out = [];
+  let p = 0;
+  for (let n = 0; n < count && p + 46 <= cd.byteLength; n++) {
+    if (cd.getUint32(p, true) !== 0x02014b50) break;
+    const method = cd.getUint16(p + 10, true);
+    let comp = cd.getUint32(p + 20, true);
+    let uncomp = cd.getUint32(p + 24, true);
+    const nl = cd.getUint16(p + 28, true), xl = cd.getUint16(p + 30, true), cl = cd.getUint16(p + 32, true);
+    let lo = cd.getUint32(p + 42, true);
+    const name = dec.decode(new Uint8Array(cd.buffer, p + 46, nl));
+    let x = p + 46 + nl;
+    const xEnd = x + xl;
+    while (x + 4 <= xEnd) {
+      const id = cd.getUint16(x, true), len = cd.getUint16(x + 2, true);
+      if (id === 1) {
+        let q = x + 4;
+        if (uncomp === 0xffffffff) { uncomp = Number(cd.getBigUint64(q, true)); q += 8; }
+        if (comp === 0xffffffff) { comp = Number(cd.getBigUint64(q, true)); q += 8; }
+        if (lo === 0xffffffff) { lo = Number(cd.getBigUint64(q, true)); }
+      }
+      x += 4 + len;
+    }
+    p = xEnd + cl;
+    if (!wanted(name)) continue;
+    const lh = new DataView(await file.slice(lo, lo + 30).arrayBuffer());
+    const start = lo + 30 + lh.getUint16(26, true) + lh.getUint16(28, true);
+    const blob = file.slice(start, start + comp);
+    let text;
+    if (method === 0) text = await blob.text();
+    else if (method === 8) text = await new Response(blob.stream().pipeThrough(new DecompressionStream("deflate-raw"))).text();
+    else continue;
+    out.push({ name, text });
+  }
+  return out;
+}
+
+/* ---------- Instagram-JSON auswerten ---------- */
+const KINDS = [
+  ["followers", /(^|\/)followers(_\d+)?\.json$/],
+  ["following", /(^|\/)following\.json$/],
+  ["closeFriends", /close_friends\.json$/],
+  ["pending", /pending_follow_requests\.json$/],
+  ["recentRequests", /recent_follow_requests\.json$/],
+  ["received", /follow_requests_you'?ve_received\.json$/],
+  ["unfollowedByMe", /recently_unfollowed_(profiles|accounts)\.json$/],
+  ["blocked", /blocked_(profiles|accounts)\.json$/],
+  ["restricted", /restricted_(profiles|accounts)\.json$/]
+];
+const kindOf = name => (KINDS.find(([, re]) => re.test(name.toLowerCase())) || [])[0];
+
+function entries(json) {
+  let arr = Array.isArray(json) ? json : null;
+  if (!arr && json && typeof json === "object") arr = Object.values(json).find(Array.isArray);
+  if (!arr) return [];
+  const res = [];
+  for (const it of arr) {
+    const s = (it.string_list_data || [])[0] || {};
+    let u = s.value || it.title || "";
+    if (!u && s.href) u = s.href.replace(/\/+$/, "").split("/").pop();
+    u = String(u).trim().replace(/^@/, "");
+    if (u) res.push({ u, t: s.timestamp || it.timestamp || 0 });
+  }
+  return res;
+}
+
+function buildData(files) {
+  const d = { followers: [], following: [], closeFriends: [], pending: [], recentRequests: [], received: [], unfollowedByMe: [], blocked: [], restricted: [] };
+  let found = 0, htmlOnly = false;
+  for (const f of files) {
+    if (/\.html$/i.test(f.name) && /followers|following/.test(f.name)) htmlOnly = true;
+    const k = kindOf(f.name);
+    if (!k) continue;
+    try { d[k].push(...entries(JSON.parse(f.text))); found++; } catch {}
+  }
+  for (const k in d) {
+    const m = new Map();
+    for (const e of d[k]) if (!m.has(e.u.toLowerCase())) m.set(e.u.toLowerCase(), e);
+    d[k] = [...m.values()];
+  }
+  return { d, found, htmlOnly };
+}
+
+function analyse(d) {
+  const fol = new Set(d.followers.map(e => e.u.toLowerCase()));
+  const ing = new Set(d.following.map(e => e.u.toLowerCase()));
+  return {
+    notBack: d.following.filter(e => !fol.has(e.u.toLowerCase())),
+    fans: d.followers.filter(e => !ing.has(e.u.toLowerCase())),
+    mutual: d.following.filter(e => fol.has(e.u.toLowerCase()))
+  };
+}
+
+function diff(prev, cur) {
+  const minus = (a, b) => { const s = new Set(b.map(x => x.toLowerCase())); return a.filter(x => !s.has(x.toLowerCase())); };
+  return {
+    lost: minus(prev.followers, cur.followers),
+    gained: minus(cur.followers, prev.followers),
+    iUnfollowed: minus(prev.following, cur.following),
+    iFollowed: minus(cur.following, prev.following)
+  };
+}
+
+/* ---------- Beispieldaten ---------- */
+function sample() {
+  const names = ["lena.mtr", "jonas_b", "mia.sky", "paul.fotos", "sophie_k", "ben.trains", "emma.liest", "noah.kocht", "hanna_ldn", "luca.rides", "clara.blum", "finn_8", "marie.art", "elias.jpg", "lea.wandert", "tim.code", "nina_vibes", "max.surf", "anna.kaffee", "leo.beats", "zoe.design", "felix_fit", "ida.reist", "theo.cam", "mila.mode", "jan.gaming", "lina.food", "oskar_m", "frida.pics", "karl.liftet", "berlin.eats", "streetwear.daily", "natur.momente", "techhub.de", "memes.lokal", "fussball.news"];
+  const now = Date.now() / 1000, day = 86400;
+  const ts = i => Math.round(now - ((i * 37) % 700) * day - i * 3 * day);
+  const followers = names.slice(0, 26).map((u, i) => ({ u, t: ts(i) }));
+  const following = names.filter((_, i) => i % 5 !== 2).map((u, i) => ({ u, t: ts(i + 4) }));
+  return {
+    d: {
+      followers, following,
+      closeFriends: ["lena.mtr", "mia.sky", "jonas_b"].map(u => ({ u, t: ts(2) })),
+      pending: [{ u: "privat.konto", t: ts(5) }, { u: "anna.kaffee", t: ts(9) }],
+      recentRequests: [], received: [{ u: "neu.hier_23", t: ts(1) }],
+      unfollowedByMe: [{ u: "werbung.shop", t: ts(3) }],
+      blocked: [{ u: "spam.bot99", t: ts(20) }], restricted: []
+    },
+    prev: {
+      date: Date.now() - 9 * day * 1000,
+      followers: [...names.slice(0, 22), "alex.wav", "kim.mood"],
+      following: names.filter((_, i) => i % 5 !== 2).slice(0, 26).concat("werbung.shop")
+    }
+  };
+}
+
+/* ---------- Zustand ---------- */
+const state = {
+  data: null, isSample: true, loadedAt: null, compare: null,
+  tab: "guide", listKey: "notBack", q: "", sort: "new", limit: 200
+};
+
+function loadSaved() {
+  const cur = store.get("fc.current");
+  if (cur && cur.d) {
+    state.data = cur.d; state.isSample = false; state.loadedAt = cur.at;
+    const snaps = store.get("fc.snaps") || [];
+    state.compare = snaps.length > 1 ? snaps[snaps.length - 2] : null;
+    state.tab = "home";
+  } else {
+    const s = sample();
+    state.data = s.d; state.isSample = true; state.compare = s.prev; state.loadedAt = null;
+    state.tab = "guide";
+  }
+}
+
+function saveSnapshot(d) {
+  const snap = { date: Date.now(), followers: d.followers.map(e => e.u), following: d.following.map(e => e.u) };
+  const snaps = store.get("fc.snaps") || [];
+  const prev = snaps[snaps.length - 1] || null;
+  snaps.push(snap);
+  while (snaps.length > 12) snaps.shift();
+  store.set("fc.snaps", snaps);
+  store.set("fc.current", { at: snap.date, d });
+  return prev;
+}
+
+/* ---------- Dateien laden ---------- */
+async function readInput(fileList) {
+  const files = [];
+  for (const f of fileList) {
+    if (/\.zip$/i.test(f.name) || f.type.includes("zip")) {
+      files.push(...await readZip(f, n => /\.(json|html)$/i.test(n) && /followers_and_following|connections|followers|following/i.test(n)));
+    } else if (/\.json$/i.test(f.name)) {
+      files.push({ name: f.name, text: await f.text() });
+    }
+  }
+  return buildData(files);
+}
+
+async function onImport(fileList, asOld) {
+  if (!fileList || !fileList.length) return;
+  notice("Lese Export …", "ok");
+  try {
+    const { d, found, htmlOnly } = await readInput(fileList);
+    if (!d.followers.length && !d.following.length) {
+      if (htmlOnly) return notice("<strong>Falsches Format.</strong> Der Export ist im HTML-Format. Bitte neu anfordern und bei „Format“ <b>JSON</b> wählen (siehe Anleitung, Schritt 4).", "err");
+      return notice("<strong>Keine Follower-Daten gefunden.</strong> Prüfe, ob du bei der Anforderung „Follower und gefolgte Personen“ angekreuzt hast (Anleitung, Schritt 3).", "err");
+    }
+    if (asOld) {
+      state.compare = { date: null, followers: d.followers.map(e => e.u), following: d.following.map(e => e.u), file: fileList[0].name };
+      notice(`<strong>Älterer Export geladen.</strong> Vergleich mit „${esc(fileList[0].name)}“.`, "ok");
+      state.tab = "changes";
+    } else {
+      const prev = saveSnapshot(d);
+      state.data = d; state.isSample = false; state.loadedAt = Date.now();
+      state.compare = prev;
+      notice(`<strong>Fertig.</strong> ${d.followers.length} Follower und ${d.following.length} gefolgte Konten aus ${found} Datei${found === 1 ? "" : "en"} gelesen.` + (prev ? " Mit deinem letzten Stand verglichen." : " Dieser Stand ist gespeichert. Beim nächsten Export siehst du, wer dir entfolgt ist."), "ok");
+      state.tab = "home";
+    }
+    render();
+  } catch (e) {
+    notice(`<strong>Das hat nicht geklappt.</strong> ${esc(e.message || e)} Lade die ZIP-Datei direkt von Instagram, ohne sie umzubenennen oder zu entpacken.`, "err");
+  }
+}
+
+/* ---------- Anzeige ---------- */
+let noticeTimer;
+function notice(html, kind) {
+  clearTimeout(noticeTimer);
+  $("#notice").innerHTML = html ? `<div class="banner ${kind || ""}">${html}</div>` : "";
+  if (kind === "ok" && html && !html.startsWith("Lese")) noticeTimer = setTimeout(() => { $("#notice").innerHTML = ""; }, 9000);
+}
+function toast(msg) {
+  const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.append(t);
+  setTimeout(() => t.remove(), 2200);
+}
+const fmtDate = t => t ? new Date(t * 1000).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" }) : "";
+const fmtStamp = ms => new Date(ms).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
+const hue = s => { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
+
+function importButton(label, id, ghost, asOld) {
+  return `<label class="btn file ${ghost ? "ghost" : ""}" for="${id}">${label}<input type="file" id="${id}" accept=".zip,.json,application/zip,application/json" multiple data-old="${asOld ? 1 : ""}"></label>`;
+}
+
+function sampleBanner() {
+  return state.isSample ? `<div class="banner"><strong>Beispieldaten</strong><span>Das sind erfundene Konten, damit du siehst, wie es aussieht. Lade deinen Export, um deine echten Zahlen zu sehen.</span></div>` : "";
+}
+
+const LISTS = {
+  notBack: ["Folgen dir nicht zurück", "Du folgst ihnen, sie dir nicht.", a => a.notBack, "seit"],
+  fans: ["Fans", "Sie folgen dir, du ihnen nicht.", a => a.fans, "folgt dir seit"],
+  mutual: ["Gegenseitig", "Ihr folgt euch beide.", a => a.mutual, "seit"],
+  followers: ["Alle Follower", "", (a, d) => d.followers, "folgt dir seit"],
+  following: ["Du folgst", "", (a, d) => d.following, "seit"],
+  closeFriends: ["Enge Freunde", "", (a, d) => d.closeFriends, "seit"],
+  pending: ["Deine offenen Anfragen", "Du hast angefragt, sie haben noch nicht angenommen.", (a, d) => d.pending, "angefragt am"],
+  received: ["Anfragen an dich", "", (a, d) => d.received, "am"],
+  unfollowedByMe: ["Von dir entfolgt", "Laut Instagram kürzlich von dir entfolgt.", (a, d) => d.unfollowedByMe, "am"],
+  blocked: ["Blockiert", "", (a, d) => d.blocked, "seit"],
+  restricted: ["Eingeschränkt", "", (a, d) => d.restricted, "seit"]
+};
+
+function viewHome() {
+  const d = state.data, a = analyse(d);
+  const F = d.followers.length, G = d.following.length;
+  const tot = a.mutual.length + a.notBack.length + a.fans.length || 1;
+  const pct = n => (n / tot * 100).toFixed(1) + "%";
+  return `
+    ${sampleBanner()}
+    <div class="tiles">
+      <button class="tile" data-go="followers"><span class="n">${F}</span><span class="l">Follower</span></button>
+      <button class="tile" data-go="following"><span class="n">${G}</span><span class="l">Du folgst</span></button>
+      <button class="tile warn" data-go="notBack"><span class="n">${a.notBack.length}</span><span class="l">folgen dir nicht zurück</span></button>
+      <button class="tile accent" data-go="fans"><span class="n">${a.fans.length}</span><span class="l">Fans (du folgst nicht zurück)</span></button>
+      <button class="tile wide" data-go="mutual"><span><span class="l">Gegenseitig</span></span><span class="n">${a.mutual.length}</span></button>
+    </div>
+    <section class="panel">
+      <div class="eyebrow">Verhältnis</div>
+      <div class="ratio" role="img" aria-label="Anteile gegenseitig, nicht zurück, Fans">
+        <span style="width:${pct(a.mutual.length)};background:var(--good)"></span>
+        <span style="width:${pct(a.notBack.length)};background:var(--warn)"></span>
+        <span style="width:${pct(a.fans.length)};background:var(--accent)"></span>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--good)"></i>Gegenseitig ${pct(a.mutual.length)}</span>
+        <span><i style="background:var(--warn)"></i>Nicht zurück ${pct(a.notBack.length)}</span>
+        <span><i style="background:var(--accent)"></i>Fans ${pct(a.fans.length)}</span>
+      </div>
+      <p class="small muted">Follower pro gefolgtem Konto: <b style="color:var(--fg)">${G ? (F / G).toFixed(2).replace(".", ",") : "–"}</b></p>
+    </section>
+    ${changesSummary()}
+    <section class="panel">
+      <h2>${state.isSample ? "Deinen Export laden" : "Neuen Export laden"}</h2>
+      <p class="small muted">Die Datei wird nur hier auf deinem Handy gelesen. Nichts wird hochgeladen.</p>
+      ${importButton("Export auswählen (ZIP)", "imp-home")}
+    </section>`;
+}
+
+function changesSummary() {
+  if (!state.compare) return "";
+  const c = diff(state.compare, { followers: state.data.followers.map(e => e.u), following: state.data.following.map(e => e.u) });
+  return `<button class="panel" data-tab-go="changes" style="text-align:left;cursor:pointer">
+    <div class="eyebrow">Seit ${state.compare.date ? fmtStamp(state.compare.date) : "dem älteren Export"}</div>
+    <div class="tiles" style="grid-template-columns:1fr 1fr">
+      <div><div class="tile-n" style="font-family:var(--display);font-weight:800;font-size:26px;color:var(--bad)">−${c.lost.length}</div><div class="small muted">haben dir entfolgt</div></div>
+      <div><div style="font-family:var(--display);font-weight:800;font-size:26px;color:var(--good)">+${c.gained.length}</div><div class="small muted">neue Follower</div></div>
+    </div>
+  </button>`;
+}
+
+function listItems(items, label) {
+  if (!items.length) return `<div class="empty">Niemand in dieser Liste.</div>`;
+  const shown = items.slice(0, state.limit);
+  return `<ul class="list">${shown.map(e => {
+    const u = typeof e === "string" ? e : e.u, t = typeof e === "string" ? 0 : e.t;
+    return `<li><span class="av" style="background:hsl(${hue(u)} 45% 48%)">${esc(u[0].toUpperCase())}</span>
+      <span class="who"><span class="u">@${esc(u)}</span>${t ? `<span class="d">${label} ${fmtDate(t)}</span>` : ""}</span>
+      <a class="open" href="https://www.instagram.com/${encodeURIComponent(u)}/" target="_blank" rel="noopener">Profil</a></li>`;
+  }).join("")}</ul>
+  ${items.length > shown.length ? `<button class="btn ghost" data-more>${items.length - shown.length} weitere anzeigen</button>` : ""}`;
+}
+
+function sorted(items) {
+  const q = state.q.trim().toLowerCase();
+  let r = q ? items.filter(e => e.u.toLowerCase().includes(q)) : items.slice();
+  if (state.sort === "new") r.sort((x, y) => y.t - x.t);
+  else if (state.sort === "old") r.sort((x, y) => x.t - y.t);
+  else r.sort((x, y) => x.u.localeCompare(y.u));
+  return r;
+}
+
+function viewLists() {
+  const d = state.data, a = analyse(d);
+  const keys = Object.keys(LISTS).filter(k => ["notBack", "fans", "mutual", "followers", "following"].includes(k) || LISTS[k][2](a, d).length);
+  if (!keys.includes(state.listKey)) state.listKey = "notBack";
+  const [title, sub, get, label] = LISTS[state.listKey];
+  const items = sorted(get(a, d));
+  return `
+    ${sampleBanner()}
+    <div class="chips" role="group" aria-label="Liste wählen">${keys.map(k =>
+      `<button class="chip" data-list="${k}" aria-pressed="${k === state.listKey}">${LISTS[k][0]} <b>${LISTS[k][2](a, d).length}</b></button>`).join("")}</div>
+    <div><h2>${title}</h2>${sub ? `<p class="small muted">${sub}</p>` : ""}</div>
+    <div class="tools">
+      <input class="field" id="q" type="search" placeholder="Name suchen" value="${esc(state.q)}" autocomplete="off" autocapitalize="off">
+      <select class="field" id="sort" aria-label="Sortierung">
+        <option value="new" ${state.sort === "new" ? "selected" : ""}>Neueste</option>
+        <option value="old" ${state.sort === "old" ? "selected" : ""}>Älteste</option>
+        <option value="az" ${state.sort === "az" ? "selected" : ""}>A–Z</option>
+      </select>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+      <span class="small muted">${items.length} Konten</span>
+      <button class="btn ghost sm" data-copy>Namen kopieren</button>
+    </div>
+    <div id="listbox">${listItems(items, label)}</div>`;
+}
+
+function viewChanges() {
+  const cur = { followers: state.data.followers.map(e => e.u), following: state.data.following.map(e => e.u) };
+  const snaps = store.get("fc.snaps") || [];
+  let body;
+  if (!state.compare) {
+    body = `<div class="panel">
+      <h2>Noch kein Vergleich möglich</h2>
+      <p class="muted small">Dein aktueller Stand ist gespeichert. Lade in ein paar Tagen einen neuen Export, dann siehst du hier, wer dir entfolgt ist und wer neu dazukam.</p>
+      <p class="muted small">Hast du schon einen älteren Export auf dem Handy? Dann kannst du ihn direkt vergleichen.</p>
+      ${importButton("Älteren Export vergleichen", "imp-old", true, true)}
+    </div>`;
+  } else {
+    const c = diff(state.compare, cur);
+    const sec = (t, arr, color) => `<section style="display:flex;flex-direction:column;gap:8px">
+      <h2 style="display:flex;justify-content:space-between"><span>${t}</span><span style="color:${color};font-variant-numeric:tabular-nums">${arr.length}</span></h2>
+      ${listItems(arr.map(u => ({ u, t: 0 })), "")}</section>`;
+    body = `<p class="small muted">Vergleich: ${state.compare.date ? "Stand vom " + fmtStamp(state.compare.date) : "älterer Export"} → ${state.isSample ? "heute" : "Stand vom " + fmtStamp(state.loadedAt || Date.now())}</p>
+      ${sec("Haben dir entfolgt", c.lost, "var(--bad)")}
+      ${sec("Neue Follower", c.gained, "var(--good)")}
+      ${sec("Du hast entfolgt", c.iUnfollowed, "var(--muted)")}
+      ${sec("Du folgst neu", c.iFollowed, "var(--muted)")}
+      ${importButton("Mit anderem älteren Export vergleichen", "imp-old", true, true)}`;
+  }
+  const hist = snaps.length ? `<section class="panel"><div class="eyebrow">Gespeicherte Stände auf diesem Handy</div>
+    ${snaps.slice().reverse().map(s => `<div style="display:flex;justify-content:space-between" class="small"><span>${fmtStamp(s.date)}</span><span class="muted" style="font-variant-numeric:tabular-nums">${s.followers.length} Follower · ${s.following.length} gefolgt</span></div>`).join("")}
+    <button class="btn ghost sm" data-reset>Alle gespeicherten Stände löschen</button></section>` : "";
+  return `${sampleBanner()}${body}${hist}`;
+}
+
+function viewHistory() {
+  const d = state.data;
+  const months = [];
+  const now = new Date();
+  for (let i = 11; i >= 0; i--) { const m = new Date(now.getFullYear(), now.getMonth() - i, 1); months.push({ key: m.getFullYear() * 12 + m.getMonth(), label: m.toLocaleDateString("de-DE", { month: "short" }).replace(".", ""), f: 0, g: 0 }); }
+  const idx = new Map(months.map((m, i) => [m.key, i]));
+  const bucket = (arr, k) => { for (const e of arr) if (e.t) { const dt = new Date(e.t * 1000); const i = idx.get(dt.getFullYear() * 12 + dt.getMonth()); if (i !== undefined) months[i][k]++; } };
+  bucket(d.followers, "f"); bucket(d.following, "g");
+  const max = Math.max(1, ...months.map(m => Math.max(m.f, m.g)));
+  const W = 340, H = 190, L = 26, B = 22, T = 14, cw = (W - L) / 12, ch = H - B - T;
+  const y = v => T + ch - v / max * ch;
+  const ticks = [0, Math.round(max / 2), max].filter((v, i, s) => s.indexOf(v) === i);
+  const svg = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Neue Follower und neu gefolgte Konten pro Monat">
+    ${ticks.map(v => `<line class="grid" x1="${L}" x2="${W}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`).join("")}
+    ${months.map((m, i) => {
+      const x = L + i * cw, bw = (cw - 6) / 2;
+      return `<rect class="bar" x="${x + 3}" y="${y(m.f)}" width="${bw}" height="${T + ch - y(m.f)}" rx="2"/>
+        <rect class="bar2" x="${x + 3 + bw}" y="${y(m.g)}" width="${bw}" height="${T + ch - y(m.g)}" rx="2"/>
+        <text x="${x + cw / 2}" y="${H - 6}" text-anchor="middle">${m.label}</text>`;
+    }).join("")}
+  </svg>`;
+  const recent = d.followers.slice().sort((a, b) => b.t - a.t).slice(0, 10);
+  const oldest = d.followers.filter(e => e.t).sort((a, b) => a.t - b.t).slice(0, 5);
+  return `${sampleBanner()}
+    <section class="panel">
+      <h2>Pro Monat</h2>
+      ${svg}
+      <div class="legend"><span><i style="background:var(--accent)"></i>Neue Follower</span><span><i style="background:var(--muted);opacity:.45"></i>Du folgst neu</span></div>
+      <p class="small muted">Zählt nur Konten, die dir heute noch folgen bzw. denen du heute noch folgst. Wer zwischendurch wieder entfolgt hat, fehlt im Export.</p>
+    </section>
+    <section style="display:flex;flex-direction:column;gap:8px"><h2>Neueste Follower</h2>${listItems(recent, "folgt dir seit")}</section>
+    <section style="display:flex;flex-direction:column;gap:8px"><h2>Treueste Follower</h2><p class="small muted">Folgen dir am längsten.</p>${listItems(oldest, "folgt dir seit")}</section>`;
+}
+
+function viewGuide() {
+  return `
+    <section class="panel">
+      <h2>So funktioniert es</h2>
+      <p class="small muted">Instagram zeigt dir nicht, wer dir entfolgt. Du kannst dir aber deine Daten von Instagram schicken lassen. Diese Datei liest das Programm hier auf deinem Handy aus. Du gibst kein Passwort ein, und nichts wird hochgeladen.</p>
+    </section>
+    <ol class="steps">
+      <li><div><b>Instagram öffnen</b><div class="path">Unten rechts auf dein <b>Profil</b> → oben rechts Menü <b>☰</b> → <b>Kontenübersicht</b></div></div></li>
+      <li><div><b>Datenexport öffnen</b><div class="path"><b>Deine Informationen und Berechtigungen</b> → <b>Deine Informationen herunterladen</b> → <b>Informationen herunterladen</b></div></div></li>
+      <li><div><b>Nur Follower auswählen</b><div class="path">Dein Instagram-Konto wählen → <b>Einige deiner Informationen</b> → nur <b>Follower und gefolgte Personen</b> ankreuzen → <b>Weiter</b></div></div></li>
+      <li><div><b>Format JSON wählen</b><div class="path"><b>Auf Gerät herunterladen</b> → Zeitraum <b>Gesamter Zeitraum</b> → Format <b>JSON</b> (nicht HTML) → <b>Dateien erstellen</b></div></div></li>
+      <li><div><b>Warten und herunterladen</b><div class="path">Instagram schickt dir eine Benachrichtigung oder E-Mail, wenn die Datei fertig ist. Das dauert meist ein paar Minuten, manchmal einige Stunden. Dann im selben Menü auf <b>Herunterladen</b> tippen. Die ZIP-Datei landet in <b>Dateien</b> (iPhone) bzw. <b>Downloads</b> (Android).</div></div></li>
+      <li><div><b>Hier laden</b><div class="path">Unten auf <b>Export auswählen</b> tippen und die ZIP-Datei wählen. Nicht entpacken, nicht umbenennen.</div></div></li>
+      <li><div><b>Später wiederholen</b><div class="path">Mach das z. B. einmal pro Woche. Das Programm merkt sich jeden Stand und zeigt dir unter <b>Änderungen</b>, wer dir entfolgt ist und wer neu dazukam.</div></div></li>
+    </ol>
+    ${importButton("Export auswählen (ZIP)", "imp-guide")}
+    <section class="panel">
+      <div class="eyebrow">Wer schaut mein Profil an?</div>
+      <p class="small">Das kann niemand sehen. Instagram speichert Profilbesucher nicht für dich, auch nicht im Export. Apps, die das versprechen, zeigen erfundene Listen und wollen meist dein Passwort. Gib es dort nie ein. Wer deine <b>Story</b> gesehen hat, zeigt dir Instagram selbst, jeweils 48 Stunden lang.</p>
+    </section>`;
+}
+
+const VIEWS = { home: viewHome, lists: viewLists, changes: viewChanges, history: viewHistory, guide: viewGuide };
+
+function render() {
+  $("#view").innerHTML = `<div class="view" style="display:flex;flex-direction:column;gap:16px">${VIEWS[state.tab]()}</div>`;
+  document.querySelectorAll("nav.bar button").forEach(b => {
+    if (b.dataset.tab === state.tab) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+  });
+  $("#stand").innerHTML = state.isSample ? "Beispiel" : `Stand<br>${fmtStamp(state.loadedAt)}`;
+}
+function renderList() {
+  const a = analyse(state.data), [, , get, label] = LISTS[state.listKey];
+  $("#listbox").innerHTML = listItems(sorted(get(a, state.data)), label);
+}
+
+document.addEventListener("click", async e => {
+  const t = e.target.closest("button, [data-go]");
+  if (!t) return;
+  if (t.dataset.tab) { state.tab = t.dataset.tab; state.limit = 200; render(); window.scrollTo(0, 0); }
+  else if (t.dataset.go) { state.tab = "lists"; state.listKey = t.dataset.go; state.q = ""; state.limit = 200; render(); window.scrollTo(0, 0); }
+  else if (t.dataset.tabGo) { state.tab = t.dataset.tabGo; render(); window.scrollTo(0, 0); }
+  else if (t.dataset.list) { state.listKey = t.dataset.list; state.limit = 200; render(); }
+  else if ("more" in t.dataset) { state.limit += 500; state.tab === "lists" ? renderList() : render(); }
+  else if ("copy" in t.dataset) {
+    const a = analyse(state.data), text = sorted(LISTS[state.listKey][2](a, state.data)).map(e => e.u).join("\n");
+    try { await navigator.clipboard.writeText(text); toast("Namen kopiert"); }
+    catch { toast("Kopieren ging nicht"); }
+  } else if ("reset" in t.dataset) {
+    if (t.dataset.confirm) { store.del("fc.snaps"); store.del("fc.current"); loadSaved(); state.tab = "guide"; render(); toast("Gelöscht"); }
+    else { t.dataset.confirm = "1"; t.textContent = "Wirklich löschen? Nochmal tippen"; t.style.color = "var(--bad)"; }
+  }
+});
+document.addEventListener("change", e => {
+  if (e.target.type === "file") { onImport(e.target.files, !!e.target.dataset.old); }
+  else if (e.target.id === "sort") { state.sort = e.target.value; renderList(); }
+});
+document.addEventListener("input", e => {
+  if (e.target.id === "q") { state.q = e.target.value; state.limit = 200; renderList(); }
+});
+
+loadSaved();
+render();
+</script>
