@@ -16,10 +16,10 @@ Instagram-Übersicht fürs Handy: wer dir entfolgt ist, wer dir nicht zurückfol
 Profilbesucher kann man nicht sehen. Instagram stellt diese Daten nirgends bereit.
 
 ## Krasse-Fakten-Shorts (`shorts/`)
-Erzeugt automatisch 9:16-Videos (TikTok / YouTube Shorts) mit deutscher Computerstimme.
+Erzeugt automatisch 9:16-Videos im TikTok-Stil: neuronale deutsche KI-Stimme (Piper), Wort-für-Wort-Untertitel, Emoji, Fortschrittsbalken.
 
 ```bash
-bash shorts/setup.sh           # einmalig: ffmpeg, espeak-ng, mbrola-de6
+bash shorts/setup.sh           # einmalig: ffmpeg, Piper-TTS, deutsche Stimme
 python3 shorts/make_short.py   # nächstes Video -> shorts/out/NNN.mp4 + NNN.txt (Beschreibung)
 ```
 Fakten stehen in `shorts/fakten.json`, der Fortschritt in `shorts/state.json`.
