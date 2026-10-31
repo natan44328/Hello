@@ -1,4 +1,9 @@
+<!doctype html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Follow-Check</title>
+<meta name="description" content="Follow-Check: Sieh, wer dir auf Instagram entfolgt ist und wer nicht zurückfolgt. Kein Login, kein Passwort, alles lokal im Browser.">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -637,6 +642,19 @@ function viewGuide() {
     <section class="panel">
       <div class="eyebrow">Wer schaut mein Profil an?</div>
       <p class="small">Das kann niemand sehen. Instagram speichert Profilbesucher nicht für dich, auch nicht im Export. Apps, die das versprechen, zeigen erfundene Listen und wollen meist dein Passwort. Gib es dort nie ein. Wer deine <b>Story</b> gesehen hat, zeigt dir Instagram selbst, jeweils 48 Stunden lang.</p>
+    </section>
+    ${ratgeberBox()}`;
+}
+
+function ratgeberBox() {
+  const g = [["ringlicht-handy", "Ringlicht"], ["handy-stativ", "Stativ"], ["ansteckmikrofon-handy", "Mikrofon"], ["gimbal-handy", "Gimbal"], ["creator-starter-set", "Starterset"]];
+  return `
+    <section class="panel">
+      <div class="eyebrow">Ratgeber</div>
+      <h2>Bessere Reels mit dem Handy</h2>
+      <p class="small muted">Kaufberatungen für Licht, Ton und Stativ. Dort gibt es auch Werbelinks.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">${g.map(([s, n]) => `<a class="chip" style="text-decoration:none;color:inherit" href="ratgeber/${s}.html">${n}</a>`).join("")}</div>
+      <p class="small"><a href="ratgeber/index.html">Alle Ratgeber</a> · <a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a></p>
     </section>`;
 }
 

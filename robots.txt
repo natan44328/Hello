@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://natan44328.github.io/Hello/sitemap.xml

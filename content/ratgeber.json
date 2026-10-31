@@ -1,0 +1,117 @@
+[
+  {
+    "slug": "ringlicht-handy",
+    "title": "Ringlicht fürs Handy: Kaufberatung 2026",
+    "short": "Ringlicht",
+    "description": "Welches Ringlicht fürs Handy passt zu dir? Größe, Lichtfarbe, Stromversorgung und Halterung einfach erklärt, mit den wichtigsten Typen im Vergleich.",
+    "intro": "Gutes Licht bringt mehr als eine neue Handykamera. Ein Ringlicht leuchtet dein Gesicht gleichmäßig aus und sorgt für den typischen Lichtpunkt in den Augen. Hier steht, worauf es beim Kauf ankommt und welcher Typ zu welchem Einsatz passt.",
+    "criteria": [
+      ["Durchmesser", "Ab etwa 25 cm wird das Gesicht gleichmäßig ausgeleuchtet. Kleine Clip-Ringe (unter 10 cm) reichen für Selfies, aber nicht für Videos im Halbprofil."],
+      ["Lichtfarbe einstellbar", "Achte auf mindestens drei Stufen von warm (ca. 3000 K) bis kalt (ca. 6000 K). So passt das Licht zu Tageslicht und Zimmerlampen."],
+      ["Stromversorgung", "USB ist praktisch, liefert aber oft weniger Helligkeit als ein Netzteil. Mit Akku bist du flexibel, musst aber nachladen."],
+      ["Stativ und Halterung", "Ein ausziehbares Stativ bis etwa 1,6 m erlaubt Aufnahmen auf Augenhöhe im Stehen. Die Handyhalterung sollte sich drehen lassen (Hoch- und Querformat)."],
+      ["Fernbedienung", "Eine Bluetooth-Fernbedienung zum Auslösen spart viele Wege zum Handy."]
+    ],
+    "types": [
+      {"name": "Clip-Ringlicht", "for": "Selfies und Videocalls unterwegs", "pros": ["winzig, passt in die Tasche", "günstig"], "cons": ["wenig Licht", "keine Halterung"], "query": "clip ringlicht handy akku", "price": "ca. 10–20 €"},
+      {"name": "Tisch-Ringlicht (25–30 cm)", "for": "Reels und Stories am Schreibtisch", "pros": ["guter Preis-Leistungs-Mix", "meist mit Tischstativ"], "cons": ["für Ganzkörper zu klein"], "query": "ringlicht 26cm handy stativ fernbedienung", "price": "ca. 20–40 €"},
+      {"name": "Großes Ringlicht (45 cm+) mit Bodenstativ", "for": "Ganzkörper-Videos, Beauty, Tutorials", "pros": ["sehr gleichmäßiges Licht", "hohes Stativ"], "cons": ["braucht Platz", "Netzteil nötig"], "query": "ringlicht 45cm stativ handy", "price": "ca. 50–100 €"}
+    ],
+    "faq": [
+      ["Brauche ich ein Ringlicht, wenn ich am Fenster filme?", "Tageslicht ist super, schwankt aber stark. Ein Ringlicht sorgt dafür, dass alle Videos gleich aussehen, auch abends."],
+      ["Stört der Ring bei Brillenträgern?", "Er spiegelt sich oft als Kreis im Glas. Stell das Licht etwas höher und leicht seitlich auf."]
+    ]
+  },
+  {
+    "slug": "handy-stativ",
+    "title": "Handystativ mit Fernbedienung: Kaufberatung 2026",
+    "short": "Handystativ",
+    "description": "Handystativ kaufen: Selfie-Stick, Tischstativ oder Reisestativ? Höhe, Stabilität und Fernbedienung im Vergleich.",
+    "intro": "Wer regelmäßig Reels, TikToks oder Fotos von sich macht, braucht keine dritte Hand, sondern ein Stativ. Je nach Einsatz eignen sich sehr unterschiedliche Modelle.",
+    "criteria": [
+      ["Maximale Höhe", "Für Aufnahmen im Stehen auf Augenhöhe solltest du etwa 150 cm einplanen. Tischstative kommen meist nur auf 20 bis 60 cm."],
+      ["Stabilität", "Drei ausklappbare Beine mit Gummifüßen stehen sicherer als ein Mini-Fuß. Draußen bei Wind ist ein schwereres Stativ besser."],
+      ["Packmaß und Gewicht", "Fürs Reisen sind ein Packmaß unter 30 cm und ein Gewicht unter 300 g angenehm."],
+      ["Bluetooth-Fernbedienung", "Sie sollte abnehmbar sein und eine austauschbare Knopfzelle haben, statt fest eingebaut zu sein."],
+      ["Drehbarer Kopf", "Ein 360°-Kugelkopf erlaubt Hoch- und Querformat ohne Umspannen."]
+    ],
+    "types": [
+      {"name": "Selfie-Stick mit Stativbeinen", "for": "Reisen, Urlaub, spontane Gruppenfotos", "pros": ["2-in-1", "leicht"], "cons": ["eher wackelig bei voller Länge"], "query": "selfie stick stativ bluetooth fernbedienung", "price": "ca. 15–30 €"},
+      {"name": "Flexibles Mini-Stativ (Gorilla-Typ)", "for": "an Geländer, Ästen oder Stühlen befestigen", "pros": ["vielseitig", "kompakt"], "cons": ["niedrig"], "query": "flexibles handy stativ biegsam", "price": "ca. 10–25 €"},
+      {"name": "Großes Handystativ bis 1,6 m+", "for": "Ganzkörper-Videos, Tanz, Outfits", "pros": ["Augenhöhe im Stehen", "stabil"], "cons": ["größer im Gepäck"], "query": "handy stativ 160cm fernbedienung", "price": "ca. 25–50 €"}
+    ],
+    "faq": [
+      ["Passt jedes Handy in die Halterung?", "Die meisten Klemmen fassen Handys mit einer Breite von etwa 5,5 bis 9 cm. Bei sehr großen Handys mit dicker Hülle solltest du die Angabe prüfen."],
+      ["Funktioniert die Fernbedienung mit iPhone und Android?", "Fast immer ja. Sie meldet sich als Bluetooth-Taste an und löst die Kamera-App über die Lautstärketaste aus."]
+    ]
+  },
+  {
+    "slug": "ansteckmikrofon-handy",
+    "title": "Funk-Ansteckmikrofon fürs Handy: Kaufberatung 2026",
+    "short": "Ansteckmikrofon",
+    "description": "Besserer Ton für Reels und TikTok: Funk-Lavaliermikrofone fürs Handy im Vergleich. USB-C, Lightning, Reichweite, Rauschunterdrückung.",
+    "intro": "Schlechtes Bild verzeihen Zuschauer eher als schlechten Ton. Ein kabelloses Ansteckmikrofon nimmt deine Stimme direkt am Kragen auf. So fallen Hall und Straßenlärm viel weniger auf.",
+    "criteria": [
+      ["Anschluss", "USB-C für Android und neuere iPhones (ab iPhone 15), Lightning für ältere iPhones. Manchen Sets liegen beide Stecker bei."],
+      ["Ein oder zwei Sender", "Mit zwei Sendern kannst du Interviews und Gespräche aufnehmen. Für Solo-Content reicht ein Sender."],
+      ["Akkulaufzeit", "Achte auf mindestens 5 bis 6 Stunden pro Sender. Ein Ladecase ist praktisch."],
+      ["Rauschunterdrückung", "Eine zuschaltbare Geräuschunterdrückung hilft draußen. Drinnen klingt die Stimme ohne sie oft natürlicher."],
+      ["Windschutz", "Fell-Windschützer („Deadcat“) sind draußen fast Pflicht."]
+    ],
+    "types": [
+      {"name": "Einsteiger-Set mit 1 Sender", "for": "Solo-Videos, Vlogs", "pros": ["günstig", "Plug-and-play"], "cons": ["keine Interviews"], "query": "funk lavalier mikrofon handy usb c", "price": "ca. 20–35 €"},
+      {"name": "Set mit 2 Sendern und Ladecase", "for": "Interviews, Podcasts, Paar-Content", "pros": ["flexibel", "lädt unterwegs"], "cons": ["etwas teurer"], "query": "kabelloses ansteckmikrofon 2 sender ladecase handy", "price": "ca. 35–70 €"},
+      {"name": "Markensystem mit interner Aufnahme", "for": "Ambitionierte Creator, auch mit Kamera", "pros": ["Backup-Aufnahme im Sender", "sehr guter Klang"], "cons": ["teuer"], "query": "wireless mikrofon system interne aufnahme creator", "price": "ca. 150–300 €"}
+    ],
+    "faq": [
+      ["Funktioniert das mit der Instagram-App direkt?", "Ja. Das Handy erkennt den Empfänger als externes Mikrofon, auch in Instagram und TikTok."],
+      ["Wie weit reicht die Funkverbindung?", "Ohne Hindernisse oft 50 m und mehr, durch Wände deutlich weniger. Für normale Videos reicht das locker."]
+    ]
+  },
+  {
+    "slug": "gimbal-handy",
+    "title": "Handy-Gimbal: Kaufberatung 2026",
+    "short": "Gimbal",
+    "description": "Brauchst du einen Gimbal fürs Handy? Unterschiede zu Bildstabilisierung, Tracking, Gewicht und Faltbarkeit verständlich erklärt.",
+    "intro": "Ein Gimbal hält das Handy mit kleinen Motoren ruhig, auch beim Gehen oder Laufen. Moderne Handys stabilisieren schon gut. Ein Gimbal lohnt sich vor allem für flüssige Kamerafahrten und automatisches Gesichts-Tracking.",
+    "criteria": [
+      ["Brauche ich überhaupt einen?", "Für Sprechvideos vom Stativ: nein. Für Vlogs im Gehen, Reisevideos und Produktaufnahmen mit Bewegung: ja."],
+      ["Tracking", "Viele Gimbals folgen deinem Gesicht automatisch, entweder per App oder mit eingebautem KI-Sensor. Der Sensor funktioniert auch ohne App."],
+      ["Faltbarkeit und Gewicht", "Faltbare Modelle unter 400 g nimmt man auch wirklich mit."],
+      ["Ausziehbarer Griff", "Ein integrierter Verlängerungsstab ersetzt den Selfie-Stick."],
+      ["Akkulaufzeit", "Mehr als 6 Stunden sind üblich. Manche Gimbals laden das Handy unterwegs mit."]
+    ],
+    "types": [
+      {"name": "Einsteiger-Gimbal (3 Achsen)", "for": "Vlogs, Urlaub, erste Kamerafahrten", "pros": ["günstiger Einstieg", "faltbar"], "cons": ["App teils umständlich"], "query": "handy gimbal 3 achsen faltbar", "price": "ca. 50–90 €"},
+      {"name": "Gimbal mit KI-Tracking-Sensor", "for": "Solo-Creator, die sich selbst filmen", "pros": ["folgt dir ohne App", "Stativ meist dabei"], "cons": ["etwas schwerer"], "query": "gimbal handy ki tracking sensor", "price": "ca. 90–150 €"},
+      {"name": "Selfie-Stick-Gimbal (1 Achse)", "for": "Wer nur leichte Stabilisierung braucht", "pros": ["sehr leicht", "günstig"], "cons": ["kein echter 3-Achsen-Ausgleich"], "query": "selfie stick gimbal 1 achse stabilisator", "price": "ca. 25–50 €"}
+    ],
+    "faq": [
+      ["Passen große Handys?", "Achte auf die maximale Zuladung (meist etwa 280 bis 300 g). Große Pro-Max-Modelle mit Hülle kommen an diese Grenze."],
+      ["Stört die eingebaute Stabilisierung des Handys?", "Meist nicht. Wenn das Bild „schwimmt“, schalte in der Kamera-App die stärkste Stabilisierung (z.B. Action-Modus) aus."]
+    ]
+  },
+  {
+    "slug": "creator-starter-set",
+    "title": "Creator-Starterset fürs Handy: Was du wirklich brauchst (2026)",
+    "short": "Starterset",
+    "description": "Mit dem Handy Content machen: Welche Ausrüstung lohnt sich für Instagram und TikTok am Anfang? Licht, Ton, Stativ und Zubehör nach Budget.",
+    "intro": "Für gute Reels brauchst du keine Kamera für 1.000 €. Mit drei günstigen Teilen sehen und klingen deine Videos deutlich besser. Hier steht die Reihenfolge, in der sich Anschaffungen am meisten lohnen.",
+    "criteria": [
+      ["1. Stativ", "Ruhige Bilder und freie Hände. Das ist die günstigste Verbesserung überhaupt."],
+      ["2. Ton", "Ein Ansteckmikrofon macht Sprechvideos sofort professioneller."],
+      ["3. Licht", "Ein Ringlicht oder eine kleine LED-Leuchte für abends und für dunkle Räume."],
+      ["4. Speicher und Strom", "Eine Powerbank für lange Drehtage, bei Android eventuell eine microSD-Karte."],
+      ["Erst später", "Gimbal, Teleprompter und Zusatzobjektive lohnen sich erst, wenn du regelmäßig postest."]
+    ],
+    "types": [
+      {"name": "Budget-Set (unter 50 €)", "for": "Ausprobieren, erste Reels", "pros": ["kleines Risiko"], "cons": ["einfache Qualität"], "query": "vlogging kit handy stativ mikrofon licht", "price": "ca. 25–50 €"},
+      {"name": "Kompakte LED-Videoleuchte", "for": "Statt Ringlicht, auch unterwegs", "pros": ["klein", "Akku"], "cons": ["kleinere Leuchtfläche"], "query": "led videoleuchte handy akku rgb", "price": "ca. 15–35 €"},
+      {"name": "Powerbank mit Schnellladen", "for": "Lange Drehtage, Events", "pros": ["nie mehr leerer Akku"], "cons": ["Gewicht"], "query": "powerbank 20000mah usb c schnellladen", "price": "ca. 20–40 €"}
+    ],
+    "faq": [
+      ["Reicht die Handykamera wirklich?", "Ja. Aktuelle Handys filmen in 4K. Licht und Ton machen meist den größeren Unterschied als die Kamera."],
+      ["Welche Teile lohnen sich zuerst?", "Erst ein Stativ, dann ein Mikrofon, dann Licht. Mehr zu den einzelnen Geräten findest du in unseren Ratgebern."]
+    ]
+  }
+]

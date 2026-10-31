@@ -14,3 +14,9 @@ Instagram-Übersicht fürs Handy: wer dir entfolgt ist, wer dir nicht zurückfol
 7. Regelmäßig wiederholen: unter **Änderungen** siehst du, wer dir seit dem letzten Mal entfolgt ist.
 
 Profilbesucher kann man nicht sehen. Instagram stellt diese Daten nirgends bereit.
+
+## Ratgeber & Affiliate-Links
+- Inhalte stehen in `content/ratgeber.json`, die Einstellungen in `links.json` (Amazon-Tracking-ID, Impressum).
+- `python3 tools/build.py` erzeugt `ratgeber/*.html`, `impressum.html`, `datenschutz.html`, `sitemap.xml` und `robots.txt`.
+- Bei jedem Push auf `master` baut `.github/workflows/pages.yml` die Seite und veröffentlicht sie über GitHub Pages.
+- Alle Amazon-Links sind mit ★ und `rel="sponsored"` gekennzeichnet. Auf jeder Seite steht ein Werbehinweis.
