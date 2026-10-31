@@ -1,8 +1,17 @@
-<title>Follow-Check</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wer hat mir auf Instagram entfolgt? Ohne Login – Follow-Check</title>
+<meta name="description" content="Sieh, wer dir auf Instagram entfolgt ist und wer dir nicht zurückfolgt. Ohne Passwort, ohne Login, ohne Upload: Follow-Check liest deinen offiziellen Instagram-Datenexport direkt auf deinem Handy.">
+<meta name="theme-color" content="#c2186b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Follow-Check: Wer hat mir auf Instagram entfolgt?">
+<meta property="og:description" content="Unfollower, Fans und gegenseitige Follows sehen. Ohne Passwort, nichts wird hochgeladen.">
+<meta property="og:locale" content="de_DE">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23c2186b'/%3E%3Cpath d='M18 33l9 9 19-20' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <style>
 /* Layout: Handy-App, eine Spalte, Tab-Leiste unten im Daumenbereich */
 :root {
@@ -19,9 +28,10 @@
   --good-soft: #dcf2e7;
   --bad: #b3263a;
   --bad-soft: #fbe1e4;
-  --display: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
-  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  /* Nur System-Schriften: keine Anfragen an Google Fonts (DSGVO) */
+  --display: "Avenir Next", "Segoe UI Variable Display", system-ui, -apple-system, sans-serif;
+  --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --bar-h: 64px;
 }
 @media (prefers-color-scheme: dark) {
@@ -40,6 +50,7 @@
 }
 * { box-sizing: border-box; }
 body {
+  margin: 0;
   background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.45;
   -webkit-tap-highlight-color: transparent;
 }
@@ -170,7 +181,18 @@ nav.bar button[aria-current="page"] { color: var(--accent); }
   .view { animation: in .18s ease-out; }
   @keyframes in { from { transform: translateY(4px); } to { transform: none; } }
 }
+
+/* Pro und Unterstützen */
+.pro-tag { font-size: 11px; font-weight: 700; letter-spacing: .04em; padding: 2px 7px; border-radius: 99px; background: var(--accent-soft); color: var(--accent); vertical-align: 2px; }
+.panel.pro { border-color: var(--accent); }
+.pro-list { margin: 0; padding-left: 20px; font-size: 14px; display: flex; flex-direction: column; gap: 4px; }
+.btn.link { text-decoration: none; }
+.chip.locked { opacity: .6; }
+footer.foot { display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: center; font-size: 12.5px; color: var(--muted); padding-top: 8px; }
+footer.foot a { color: var(--muted); }
 </style>
+</head>
+<body>
 
 <div class="wrap" id="app">
   <header class="top">
@@ -182,6 +204,11 @@ nav.bar button[aria-current="page"] { color: var(--accent); }
   </header>
   <div id="notice"></div>
   <main id="view"></main>
+  <footer class="foot">
+    <a href="anleitung-instagram-export.html">Instagram-Export: Anleitung</a>
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+  </footer>
 </div>
 
 <nav class="bar" aria-label="Bereiche">
@@ -196,6 +223,23 @@ nav.bar button[aria-current="page"] { color: var(--accent); }
 
 <script>
 "use strict";
+
+/* ======================================================================
+   EINSTELLUNGEN – hier trägst du deine Links ein (siehe BUSINESS.md)
+   ----------------------------------------------------------------------
+   SUPPORT_URL: Link zu deiner Spendenseite (z. B. https://ko-fi.com/deinname).
+                Leer lassen = kein Unterstützen-Button.
+   PRO_URL:     Link zu deinem Lemon-Squeezy-Produkt (Checkout-Link).
+                Leer lassen = alle Funktionen sind kostenlos, keine Pro-Sperre.
+   PRO_PRICE:   Preis, wie er auf der Seite angezeigt wird.
+   LS_STORE_ID: Deine Lemon-Squeezy-Store-ID (Zahl). Wenn gesetzt, werden nur
+                Lizenzschlüssel aus deinem Shop akzeptiert.
+   ====================================================================== */
+const SUPPORT_URL = "";
+const PRO_URL = "";
+const PRO_PRICE = "4,99 €";
+const LS_STORE_ID = 0;
+
 const $ = (s, el = document) => el.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const store = {
@@ -203,6 +247,60 @@ const store = {
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } },
   del(k) { try { localStorage.removeItem(k); } catch {} }
 };
+
+/* ---------- Pro-Freischaltung ---------- */
+// Ohne PRO_URL ist alles frei. In den Beispieldaten ist alles sichtbar, damit man sieht, was Pro kann.
+const proActive = () => !!PRO_URL;
+const isPro = () => !proActive() || !!(store.get("fc.pro") || {}).key;
+const canUse = () => isPro() || state.isSample;
+
+async function activateLicense(key) {
+  const body = new URLSearchParams({ license_key: key, instance_name: "Follow-Check " + new Date().toISOString().slice(0, 10) });
+  const res = await fetch("https://api.lemonsqueezy.com/v1/licenses/activate", {
+    method: "POST", headers: { Accept: "application/json" }, body
+  });
+  const j = await res.json().catch(() => ({}));
+  if (!j.activated) throw new Error(j.error || "Der Schlüssel ist ungültig oder schon zu oft benutzt.");
+  if (LS_STORE_ID && j.meta && j.meta.store_id !== LS_STORE_ID) throw new Error("Dieser Schlüssel gehört nicht zu Follow-Check.");
+  store.set("fc.pro", { key, instance: j.instance && j.instance.id, at: Date.now() });
+}
+
+function proPanel(what) {
+  return `<section class="panel pro">
+    <h2>${esc(what)} <span class="pro-tag">PRO</span></h2>
+    <p class="small muted">Follow-Check ist kostenlos. Mit Pro schaltest du einmalig für ${esc(PRO_PRICE)} alle Extras frei. Kein Abo.</p>
+    <ul class="pro-list">
+      <li>Verlauf: neue Follower pro Monat, neueste und treueste Follower</li>
+      <li>Alle Listen: offene Anfragen, enge Freunde, blockiert, eingeschränkt …</li>
+      <li>Namenslisten kopieren</li>
+      <li>Mit beliebigen älteren Exporten vergleichen</li>
+    </ul>
+    <a class="btn link" href="${esc(PRO_URL)}" target="_blank" rel="noopener">Pro kaufen · ${esc(PRO_PRICE)}</a>
+    <button class="btn ghost sm" data-tab-go="guide" style="align-self:flex-start">Ich habe einen Lizenzschlüssel</button>
+  </section>`;
+}
+
+function supportPanel() {
+  if (!SUPPORT_URL) return "";
+  return `<section class="panel">
+    <div class="eyebrow">Gefällt dir Follow-Check?</div>
+    <p class="small">Keine Werbung, kein Tracking, kein Passwort. Wenn es dir geholfen hat, freue ich mich über einen kleinen Beitrag.</p>
+    <a class="btn ghost link" href="${esc(SUPPORT_URL)}" target="_blank" rel="noopener">☕ Unterstützen</a>
+  </section>`;
+}
+
+function licensePanel() {
+  if (!proActive()) return "";
+  const p = store.get("fc.pro");
+  if (p && p.key) return `<section class="panel"><div class="eyebrow">Pro</div><p class="small"><b style="color:var(--good)">Pro ist freigeschaltet.</b> Danke für deine Unterstützung!</p></section>`;
+  return `<section class="panel pro">
+    <h2>Pro freischalten <span class="pro-tag">PRO</span></h2>
+    <p class="small muted">Nach dem Kauf bekommst du einen Lizenzschlüssel per E-Mail. Füge ihn hier ein. Dabei wird nur der Schlüssel geprüft, deine Instagram-Daten verlassen dein Handy nicht.</p>
+    <input class="field" id="lic" placeholder="Lizenzschlüssel" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <button class="btn" data-activate>Freischalten</button>
+    <a class="small" href="${esc(PRO_URL)}" target="_blank" rel="noopener">Noch keinen Schlüssel? Pro für ${esc(PRO_PRICE)} kaufen</a>
+  </section>`;
+}
 
 /* ---------- ZIP lesen (ohne Bibliothek, nur die nötigen Dateien) ---------- */
 async function readZip(file, wanted) {
@@ -493,8 +591,14 @@ function viewHome() {
       <h2>${state.isSample ? "Deinen Export laden" : "Neuen Export laden"}</h2>
       <p class="small muted">Die Datei wird nur hier auf deinem Handy gelesen. Nichts wird hochgeladen.</p>
       ${importButton("Export auswählen (ZIP)", "imp-home")}
-    </section>`;
+    </section>
+    ${state.isSample ? "" : supportPanel()}`;
 }
+
+const FREE_LISTS = ["notBack", "fans", "mutual", "followers", "following"];
+const listLocked = k => !FREE_LISTS.includes(k) && !canUse();
+const oldImport = label => canUse() ? importButton(label, "imp-old", true, true)
+  : `<a class="btn ghost link" href="${esc(PRO_URL)}" target="_blank" rel="noopener">${label} <span class="pro-tag">PRO</span></a>`;
 
 function changesSummary() {
   if (!state.compare) return "";
@@ -531,14 +635,16 @@ function sorted(items) {
 
 function viewLists() {
   const d = state.data, a = analyse(d);
-  const keys = Object.keys(LISTS).filter(k => ["notBack", "fans", "mutual", "followers", "following"].includes(k) || LISTS[k][2](a, d).length);
+  const keys = Object.keys(LISTS).filter(k => FREE_LISTS.includes(k) || LISTS[k][2](a, d).length);
   if (!keys.includes(state.listKey)) state.listKey = "notBack";
   const [title, sub, get, label] = LISTS[state.listKey];
+  const chips = `<div class="chips" role="group" aria-label="Liste wählen">${keys.map(k =>
+      `<button class="chip ${listLocked(k) ? "locked" : ""}" data-list="${k}" aria-pressed="${k === state.listKey}">${LISTS[k][0]} <b>${listLocked(k) ? "PRO" : LISTS[k][2](a, d).length}</b></button>`).join("")}</div>`;
+  if (listLocked(state.listKey)) return `${chips}${proPanel(title)}`;
   const items = sorted(get(a, d));
   return `
     ${sampleBanner()}
-    <div class="chips" role="group" aria-label="Liste wählen">${keys.map(k =>
-      `<button class="chip" data-list="${k}" aria-pressed="${k === state.listKey}">${LISTS[k][0]} <b>${LISTS[k][2](a, d).length}</b></button>`).join("")}</div>
+    ${chips}
     <div><h2>${title}</h2>${sub ? `<p class="small muted">${sub}</p>` : ""}</div>
     <div class="tools">
       <input class="field" id="q" type="search" placeholder="Name suchen" value="${esc(state.q)}" autocomplete="off" autocapitalize="off">
@@ -550,7 +656,7 @@ function viewLists() {
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
       <span class="small muted">${items.length} Konten</span>
-      <button class="btn ghost sm" data-copy>Namen kopieren</button>
+      <button class="btn ghost sm" data-copy>Namen kopieren${canUse() ? "" : ` <span class="pro-tag">PRO</span>`}</button>
     </div>
     <div id="listbox">${listItems(items, label)}</div>`;
 }
@@ -564,7 +670,7 @@ function viewChanges() {
       <h2>Noch kein Vergleich möglich</h2>
       <p class="muted small">Dein aktueller Stand ist gespeichert. Lade in ein paar Tagen einen neuen Export, dann siehst du hier, wer dir entfolgt ist und wer neu dazukam.</p>
       <p class="muted small">Hast du schon einen älteren Export auf dem Handy? Dann kannst du ihn direkt vergleichen.</p>
-      ${importButton("Älteren Export vergleichen", "imp-old", true, true)}
+      ${oldImport("Älteren Export vergleichen")}
     </div>`;
   } else {
     const c = diff(state.compare, cur);
@@ -576,7 +682,7 @@ function viewChanges() {
       ${sec("Neue Follower", c.gained, "var(--good)")}
       ${sec("Du hast entfolgt", c.iUnfollowed, "var(--muted)")}
       ${sec("Du folgst neu", c.iFollowed, "var(--muted)")}
-      ${importButton("Mit anderem älteren Export vergleichen", "imp-old", true, true)}`;
+      ${oldImport("Mit anderem älteren Export vergleichen")}`;
   }
   const hist = snaps.length ? `<section class="panel"><div class="eyebrow">Gespeicherte Stände auf diesem Handy</div>
     ${snaps.slice().reverse().map(s => `<div style="display:flex;justify-content:space-between" class="small"><span>${fmtStamp(s.date)}</span><span class="muted" style="font-variant-numeric:tabular-nums">${s.followers.length} Follower · ${s.following.length} gefolgt</span></div>`).join("")}
@@ -585,6 +691,7 @@ function viewChanges() {
 }
 
 function viewHistory() {
+  if (!canUse()) return proPanel("Verlauf");
   const d = state.data;
   const months = [];
   const now = new Date();
@@ -637,7 +744,9 @@ function viewGuide() {
     <section class="panel">
       <div class="eyebrow">Wer schaut mein Profil an?</div>
       <p class="small">Das kann niemand sehen. Instagram speichert Profilbesucher nicht für dich, auch nicht im Export. Apps, die das versprechen, zeigen erfundene Listen und wollen meist dein Passwort. Gib es dort nie ein. Wer deine <b>Story</b> gesehen hat, zeigt dir Instagram selbst, jeweils 48 Stunden lang.</p>
-    </section>`;
+    </section>
+    ${licensePanel()}
+    ${supportPanel()}`;
 }
 
 const VIEWS = { home: viewHome, lists: viewLists, changes: viewChanges, history: viewHistory, guide: viewGuide };
@@ -662,7 +771,18 @@ document.addEventListener("click", async e => {
   else if (t.dataset.tabGo) { state.tab = t.dataset.tabGo; render(); window.scrollTo(0, 0); }
   else if (t.dataset.list) { state.listKey = t.dataset.list; state.limit = 200; render(); }
   else if ("more" in t.dataset) { state.limit += 500; state.tab === "lists" ? renderList() : render(); }
+  else if ("activate" in t.dataset) {
+    const key = ($("#lic").value || "").trim();
+    if (!key) return toast("Bitte Lizenzschlüssel einfügen");
+    t.disabled = true; t.textContent = "Prüfe …";
+    try { await activateLicense(key); render(); toast("Pro freigeschaltet. Danke!"); }
+    catch (err) {
+      t.disabled = false; t.textContent = "Freischalten";
+      notice(`<strong>Freischalten hat nicht geklappt.</strong> ${esc(err.message === "Failed to fetch" ? "Keine Verbindung zum Lizenzserver. Prüfe dein Internet und versuch es nochmal." : err.message)}`, "err");
+    }
+  }
   else if ("copy" in t.dataset) {
+    if (!canUse()) { window.open(PRO_URL, "_blank", "noopener"); return; }
     const a = analyse(state.data), text = sorted(LISTS[state.listKey][2](a, state.data)).map(e => e.u).join("\n");
     try { await navigator.clipboard.writeText(text); toast("Namen kopiert"); }
     catch { toast("Kopieren ging nicht"); }
@@ -682,3 +802,5 @@ document.addEventListener("input", e => {
 loadSaved();
 render();
 </script>
+</body>
+</html>

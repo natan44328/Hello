@@ -1,0 +1,36 @@
+/* Gemeinsamer Stil für die Unterseiten (Impressum, Datenschutz, Anleitung) */
+:root {
+  --bg: #f3f2f7; --surface: #ffffff; --line: #e2e0ea; --fg: #1c1a26; --muted: #6c6880;
+  --accent: #c2186b; --accent-soft: #fbe3ef; --warn-soft: #fdecd9;
+  --display: "Avenir Next", "Segoe UI Variable Display", system-ui, -apple-system, sans-serif;
+  --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121019; --surface: #1c1926; --line: #2e2a3c; --fg: #efedf5; --muted: #9c97b0;
+    --accent: #f0629f; --accent-soft: #3a1a2b; --warn-soft: #3a2614; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121019; --surface: #1c1926; --line: #2e2a3c; --fg: #efedf5; --muted: #9c97b0;
+  --accent: #f0629f; --accent-soft: #3a1a2b; --warn-soft: #3a2614; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 680px; margin: 0 auto; padding: 24px 16px 48px; display: flex; flex-direction: column; gap: 16px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.2; margin: 0; text-wrap: balance; }
+h1 { font-size: 28px; font-weight: 800; }
+h2 { font-size: 20px; margin-top: 8px; }
+h3 { font-size: 16px; }
+p, ul, ol { margin: 0; }
+ul, ol { padding-left: 22px; display: flex; flex-direction: column; gap: 6px; }
+a { color: var(--accent); }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+.todo { background: var(--warn-soft); padding: 0 4px; border-radius: 4px; font-weight: 600; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px; border-radius: 14px;
+  background: var(--accent); color: #fff; font-weight: 600; text-decoration: none; }
+.back { font-size: 14px; text-decoration: none; }
+footer { display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: center; font-size: 13px; color: var(--muted); padding-top: 12px; }
+footer a { color: var(--muted); }
