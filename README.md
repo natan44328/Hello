@@ -34,7 +34,7 @@ Die Einstellungen stehen ganz oben im `<script>` von `index.html`:
 ```js
 const SUPPORT_URL = "";   // z. B. https://ko-fi.com/deinname → Unterstützen-Button
 const PRO_URL = "";       // Lemon-Squeezy-Checkout-Link → aktiviert die Pro-Freischaltung
-const PRO_PRICE = "4,99 €";
+const PRO_PRICE = "4,99 € inkl. USt.";
 const LS_STORE_ID = 0;    // deine Lemon-Squeezy-Store-ID
 ```
 

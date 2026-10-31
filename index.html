@@ -237,7 +237,7 @@ footer.foot a { color: var(--muted); }
    ====================================================================== */
 const SUPPORT_URL = "";
 const PRO_URL = "";
-const PRO_PRICE = "4,99 €";
+const PRO_PRICE = "4,99 € inkl. USt.";
 const LS_STORE_ID = 0;
 
 const $ = (s, el = document) => el.querySelector(s);
@@ -276,6 +276,7 @@ function proPanel(what) {
       <li>Mit beliebigen älteren Exporten vergleichen</li>
     </ul>
     <a class="btn link" href="${esc(PRO_URL)}" target="_blank" rel="noopener">Pro kaufen · ${esc(PRO_PRICE)}</a>
+    <p class="small muted">Verkäufer ist Lemon Squeezy (Merchant of Record). Es gelten deren Bedingungen und Widerrufsinformationen.</p>
     <button class="btn ghost sm" data-tab-go="guide" style="align-self:flex-start">Ich habe einen Lizenzschlüssel</button>
   </section>`;
 }
@@ -589,7 +590,7 @@ function viewHome() {
     ${changesSummary()}
     <section class="panel">
       <h2>${state.isSample ? "Deinen Export laden" : "Neuen Export laden"}</h2>
-      <p class="small muted">Die Datei wird nur hier auf deinem Handy gelesen. Nichts wird hochgeladen.</p>
+      <p class="small muted">Die Datei wird nur hier auf deinem Handy gelesen. Nichts wird hochgeladen. Die Stände werden auf deinem Gerät gespeichert, damit du Änderungen siehst.</p>
       ${importButton("Export auswählen (ZIP)", "imp-home")}
     </section>
     ${state.isSample ? "" : supportPanel()}`;
@@ -743,7 +744,7 @@ function viewGuide() {
     ${importButton("Export auswählen (ZIP)", "imp-guide")}
     <section class="panel">
       <div class="eyebrow">Wer schaut mein Profil an?</div>
-      <p class="small">Das kann niemand sehen. Instagram speichert Profilbesucher nicht für dich, auch nicht im Export. Apps, die das versprechen, zeigen erfundene Listen und wollen meist dein Passwort. Gib es dort nie ein. Wer deine <b>Story</b> gesehen hat, zeigt dir Instagram selbst, jeweils 48 Stunden lang.</p>
+      <p class="small">Das kann niemand sehen. Instagram speichert Profilbesucher nicht für dich, auch nicht im Export. Apps, die das versprechen, können keine echten Daten zeigen, weil Instagram diese nicht herausgibt, und wollen oft dein Passwort. Gib es dort nie ein. Wer deine <b>Story</b> gesehen hat, zeigt dir Instagram selbst, jeweils 48 Stunden lang.</p>
     </section>
     ${licensePanel()}
     ${supportPanel()}`;
