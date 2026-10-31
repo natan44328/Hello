@@ -14,3 +14,12 @@ Instagram-Übersicht fürs Handy: wer dir entfolgt ist, wer dir nicht zurückfol
 7. Regelmäßig wiederholen: unter **Änderungen** siehst du, wer dir seit dem letzten Mal entfolgt ist.
 
 Profilbesucher kann man nicht sehen. Instagram stellt diese Daten nirgends bereit.
+
+## Krasse-Fakten-Shorts (`shorts/`)
+Erzeugt automatisch 9:16-Videos (TikTok / YouTube Shorts) mit deutscher Computerstimme.
+
+```bash
+bash shorts/setup.sh           # einmalig: ffmpeg, espeak-ng, mbrola-de6
+python3 shorts/make_short.py   # nächstes Video -> shorts/out/NNN.mp4 + NNN.txt (Beschreibung)
+```
+Fakten stehen in `shorts/fakten.json`, der Fortschritt in `shorts/state.json`.
